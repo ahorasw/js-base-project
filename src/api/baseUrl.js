@@ -1,5 +1,5 @@
 export default function getBaseUrl(){
-  return getQueryParameterByName('useMockApi') ? 'http://localhost:3001/' : '/';
+  return getQueryParameterByName('useMockApi') ? 'http://localhost:3001/' : 'https://secure-lowlands-41801.herokuapp.com/';
 }
 
 function getQueryParameterByName(name, url){
