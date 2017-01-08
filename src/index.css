@@ -1,0 +1,11 @@
+body {
+  font-family: Sans-Serif;
+}
+
+table th {
+  padding: 5px
+}
+.myclass{
+  font-size: 2em;
+  color: darkblue;
+}

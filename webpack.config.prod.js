@@ -1,5 +1,5 @@
 import path from 'path';
-import webpack  from 'webpack';
+import webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import WebpackMd5Hash from 'webpack-md5-hash';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
@@ -9,8 +9,8 @@ export default {
   devtool: 'source-map',
   noInfo: false,
   entry: {
-    main: path.resolve(__dirname, 'src/index'),
-    vendor: path.resolve(__dirname, 'src/vendor.js'),
+    vendor: path.resolve(__dirname, 'src/vendor'),
+    main: path.resolve(__dirname, 'src/index')
   },
   target: 'web',
   output: {
@@ -19,12 +19,19 @@ export default {
     filename: '[name].[chunkhash].js'
   },
   plugins: [
-
+    // Generate an external css file with a hash in the filename
     new ExtractTextPlugin('[name].[contenthash].css'),
+
+    // Hash the files using MD5 so that their names change when the content changes.
+    new WebpackMd5Hash(),
+
+    // Use CommonsChunkPlugin to create a separate bundle
+    // of vendor libraries so that they're cached separately.
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor'
     }),
-    new WebpackMd5Hash(), 
+
+    // Create HTML file that includes reference to bundled JS.
     new HtmlWebpackPlugin({
       template: 'src/index.html',
       minify: {
@@ -40,13 +47,15 @@ export default {
         minifyURLs: true
       },
       inject: true,
-
-      trackJSToken: 'f8adc5f7f0524a62adf2e60d9a3542f4'
+      // Properties you define here are available in index.html
+      // using htmlWebpackPlugin.options.varName
+      trackJSToken: '43ad216f57d94259968435894490a5c7'
     }),
-    //Elimina Duplicacao
+
+    // Eliminate duplicate packages when generating bundle
     new webpack.optimize.DedupePlugin(),
 
-    //Minificacao JS
+    // Minify JS
     new webpack.optimize.UglifyJsPlugin()
   ],
   module: {
@@ -55,4 +64,4 @@ export default {
       {test: /\.css$/, loader: ExtractTextPlugin.extract('css?sourceMap')}
     ]
   }
-}
+};
